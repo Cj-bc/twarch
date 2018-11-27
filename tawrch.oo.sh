@@ -35,7 +35,7 @@ function username_get() {
   if [ -z "$username_last_id" ];then
     user_ret="$(use_api search -q "$username_query")"
   else
-    user_ret="$(use_api search -q "$username_query") -s "$user_last_id""
+    user_ret="$(use_api search -q "$username_query" -s "$user_last_id")"
   fi
 
   user_ret_modified="$(echo "$user_ret" | jq '.statuses | map({data: .created_at, id: .id, text: .text, urls: .entities.urls, media: .entities.media, favorite_count: .favorite_count, retweet_count : .retweet_count, extended_entries: .extended_entities, possibly_sensitive: .possibly_sensitive, in_reply_to_status_id: .in_reply_to_status_id, in_reply_to_user_id: .in_reply_to_user_id})')"
