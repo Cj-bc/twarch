@@ -5,10 +5,14 @@
 #
 # @(#) version -
 
+interval=360 # seconds
+
 tag_query="えこてん OR #絵こてん #にこにこ放送局"
 username_query="eko_0_1_0"
 tag_last_id=""
 user_last_id=""
+tag_db_file="db/tags_archive.json"
+username_db_file="db/username_archive.json"
 
 function use_api() {
   tweet.sh/tweet.sh $@
@@ -40,3 +44,18 @@ function username_get() {
 
   echo "$user_ret_modified"
 }
+
+main() {
+  echo "Start scraping:"
+  echo -n "scrape tags..."
+  tag_get >> "$tag_db_file"
+  echo "Done"
+  echo -n "scrape username..."
+  username_query >> "$username_db_file"
+  echo "Done"
+  echo "All jobs completed."
+  echo "Next: ${interval} seconds later"
+  sleep $interval
+}
+
+main
