@@ -6,9 +6,8 @@
 # @(#) version -
 
 interval=360 # seconds
-
-tag_query="えこてん OR #絵こてん #にこにこ放送局"
-username_query="eko_0_1_0"
+tag_query='"えこてん" OR "#絵こてん" -from:eko_0_1_0'
+username_query="from:eko_0_1_0"
 tag_last_id=""
 user_last_id=""
 tag_db_file="db/tags_archive.json"
