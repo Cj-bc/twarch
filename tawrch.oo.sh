@@ -51,7 +51,7 @@ main() {
   tag_get >> "$tag_db_file"
   echo "Done"
   echo -n "scrape username..."
-  username_query >> "$username_db_file"
+  username_get >> "$username_db_file"
   echo "Done"
   echo "All jobs completed."
   echo "Next: ${interval} seconds later"
