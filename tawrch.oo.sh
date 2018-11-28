@@ -28,20 +28,33 @@ jq_query='.statuses |
               })
          '
 
+username_jq_query='map({data: .created_at,
+                        id: .id,
+                        text: .text,
+                        urls: .entities.urls,
+                        media: .entities.media,
+                        favorite_count: .favorite_count,
+                        retweet_count : .retweet_count,
+                        extended_entries: .extended_entities,
+                        possibly_sensitive: .possibly_sensitive,
+                        in_reply_to_status_id: .in_reply_to_status_id,
+                        in_reply_to_user_id: .in_reply_to_user_id
+                       })
+                  '
 function use_api() {
   tweet.sh/tweet.sh $@
 }
 
 function tag_get() {
-  local tag_ret tag_ret_modifed
+  local tag_ret tag_ret_modified
   if [ -z "$tag_last_id" ];then
     tag_ret="$(use_api search -q "$tag_query" -c 100)"
   else
-    tag_ret="$(use_api search -q "$tag_query" -s "$tag_last_id" -c 100)"
+    tag_ret="$(use_api search -q "$tag_query" -c 100 -s $tag_last_id)"
   fi
 
-  tag_ret_modifed="$( echo "$tag_ret" | jq "$jq_query")"
-  tag_last_id="$(echo "$tag_ret_modifed" | jq '.[-1].id')"
+  tag_ret_modified="$( echo "$tag_ret" | jq "$jq_query")"
+  tag_last_id="$(echo "$tag_ret_modified" | jq '.[0].id')"
 
 
   echo "$tag_ret_modifed"
