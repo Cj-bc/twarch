@@ -65,10 +65,10 @@ main() {
   while true; do
     echo "Start scraping:"
     echo -n "scrape tags..."
-    tag_get | tail -n +2 >> "${tag_db_dir}/tag_$(date +%Y-%m-%d-%h-%M-%S).json"
+    tag_get >> "${tag_db_dir}/tag_$(date +%Y-%m-%d-%H-%M-%S).json"
     echo "Done"
     echo -n "scrape username..."
-    username_get >> "${username_db_dir}/username_$(date +%Y-%m-%d-%h-%M-%S).json"
+    username_get >> "${username_db_dir}/username_$(date +%Y-%m-%d-%H-%M-%S).json"
     echo "Done"
     echo "All jobs completed."
     echo "Next: ${interval} seconds later"
