@@ -35,9 +35,9 @@ function use_api() {
 function tag_get() {
   local tag_ret tag_ret_modifed
   if [ -z "$tag_last_id" ];then
-    tag_ret="$(use_api search -q "$tag_query")"
+    tag_ret="$(use_api search -q "$tag_query" -c 100)"
   else
-    tag_ret="$(use_api search -q "$tag_query" -s "$tag_last_id")"
+    tag_ret="$(use_api search -q "$tag_query" -s "$tag_last_id" -c 100)"
   fi
 
   tag_ret_modifed="$( echo "$tag_ret" | jq "$jq_query")"
@@ -48,10 +48,11 @@ function tag_get() {
 }
 
 function username_get() {
+  local user_ret user_ret_modified
   if [ -z "$username_last_id" ];then
-    user_ret="$(use_api search -q "$username_query")"
+    user_ret="$(use_api search -q "$username_query" -c 100)"
   else
-    user_ret="$(use_api search -q "$username_query" -s "$user_last_id")"
+    user_ret="$(use_api search -q "$username_query" -s "$user_last_id" -c 100)"
   fi
 
   user_ret_modified="$(echo "$user_ret" | jq "$jq_query")"
