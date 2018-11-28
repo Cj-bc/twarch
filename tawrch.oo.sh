@@ -9,7 +9,7 @@ interval=360 # seconds
 tag_query='"えこてん" OR "#絵こてん" -from:eko_0_1_0 exclude:retweets'
 username_query='from:eko_0_1_0 exclude:retweets'
 tag_last_id=""
-user_last_id=""
+username_last_id=""
 tag_db_dir="db/tag"
 username_db_dir="db/username"
 
@@ -48,15 +48,15 @@ function tag_get() {
 }
 
 function username_get() {
-  local user_ret user_ret_modified
+  local username_ret username_ret_modified
   if [ -z "$username_last_id" ];then
-    user_ret="$(use_api search -q "$username_query" -c 100)"
+    username_ret="$(use_api fetch-posts -u eko_0_1_0 -c 100)"
   else
-    user_ret="$(use_api search -q "$username_query" -s "$user_last_id" -c 100)"
+    username_ret="$(use_api fetch-posts -u eko_0_1_0 -c 100 -s $username_last_id)"
   fi
 
-  user_ret_modified="$(echo "$user_ret" | jq "$jq_query")"
-  user_last_id="$(echo "$user_ret_modified" | jq '.[-1].id')"
+  username_ret_modified="$(echo "$username_ret" | jq "$username_jq_query")"
+  username_last_id="$(echo "$username_ret_modified" | jq '.[0].id')"
 
   echo "$user_ret_modified"
 }
