@@ -28,7 +28,6 @@ function tag_get() {
   tag_ret_modifed="$( echo "$tag_ret" | jq '.statuses | map({data: .created_at, id: .id, text: .text, urls: .entities.urls, media: .entities.media, favorite_count: .favorite_count, retweet_count : .retweet_count, extended_entries: .extended_entities, possibly_sensitive: .possibly_sensitive, in_reply_to_status_id: .in_reply_to_status_id, in_reply_to_user_id: .in_reply_to_user_id})')"
   tag_last_id="$(echo "$tag_ret_modifed" | jq '.[-1].id')"
 
-  tag_ret_modifed="$(echo "$tag_ret_modifed" | jq '.[]')"
 
   echo "$tag_ret_modifed"
 }
@@ -42,7 +41,6 @@ function username_get() {
 
   user_ret_modified="$(echo "$user_ret" | jq '.statuses | map({data: .created_at, id: .id, text: .text, urls: .entities.urls, media: .entities.media, favorite_count: .favorite_count, retweet_count : .retweet_count, extended_entries: .extended_entities, possibly_sensitive: .possibly_sensitive, in_reply_to_status_id: .in_reply_to_status_id, in_reply_to_user_id: .in_reply_to_user_id})')"
   user_last_id="$(echo "$user_ret_modified" | jq '.[-1].id')"
-  user_ret_modified="$(echo "$tag_ret_modifed" | jq '.[]')"
 
   echo "$user_ret_modified"
 }
@@ -51,10 +49,10 @@ main() {
   while true; do
     echo "Start scraping:"
     echo -n "scrape tags..."
-    tag_get >> "$tag_db_file"
+    tag_get | tail -n +2 >> "${tag_db_dir}/tag_$(date +%Y-%m-%d-%h-%M-%S).json"
     echo "Done"
     echo -n "scrape username..."
-    username_get >> "$username_db_file"
+    username_get >> "${username_db_dir}/username_$(date +%Y-%m-%d-%h-%M-%S).json"
     echo "Done"
     echo "All jobs completed."
     echo "Next: ${interval} seconds later"
