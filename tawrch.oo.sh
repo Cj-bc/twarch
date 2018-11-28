@@ -10,8 +10,8 @@ tag_query='"えこてん" OR "#絵こてん" -from:eko_0_1_0 exclude:retweets'
 username_query='from:eko_0_1_0 exclude:retweets'
 tag_last_id=""
 user_last_id=""
-tag_db_file="db/tags_archive.json"
-username_db_file="db/username_archive.json"
+tag_db_dir="db/tag"
+username_db_dir="db/username"
 
 jq_query='.statuses |
           map({data: .created_at,
