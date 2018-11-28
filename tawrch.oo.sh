@@ -13,6 +13,21 @@ user_last_id=""
 tag_db_file="db/tags_archive.json"
 username_db_file="db/username_archive.json"
 
+jq_query='.statuses |
+          map({data: .created_at,
+               id: .id,
+               text: .text,
+               urls: .entities.urls,
+               media: .entities.media,
+               favorite_count: .favorite_count,
+               retweet_count : .retweet_count,
+               extended_entries: .extended_entities,
+               possibly_sensitive: .possibly_sensitive,
+               in_reply_to_status_id: .in_reply_to_status_id,
+               in_reply_to_user_id: .in_reply_to_user_id
+              })
+         '
+
 function use_api() {
   tweet.sh/tweet.sh $@
 }
@@ -25,7 +40,7 @@ function tag_get() {
     tag_ret="$(use_api search -q "$tag_query" -s "$tag_last_id")"
   fi
 
-  tag_ret_modifed="$( echo "$tag_ret" | jq '.statuses | map({data: .created_at, id: .id, text: .text, urls: .entities.urls, media: .entities.media, favorite_count: .favorite_count, retweet_count : .retweet_count, extended_entries: .extended_entities, possibly_sensitive: .possibly_sensitive, in_reply_to_status_id: .in_reply_to_status_id, in_reply_to_user_id: .in_reply_to_user_id})')"
+  tag_ret_modifed="$( echo "$tag_ret" | jq "$jq_query")"
   tag_last_id="$(echo "$tag_ret_modifed" | jq '.[-1].id')"
 
 
@@ -39,7 +54,7 @@ function username_get() {
     user_ret="$(use_api search -q "$username_query" -s "$user_last_id")"
   fi
 
-  user_ret_modified="$(echo "$user_ret" | jq '.statuses | map({data: .created_at, id: .id, text: .text, urls: .entities.urls, media: .entities.media, favorite_count: .favorite_count, retweet_count : .retweet_count, extended_entries: .extended_entities, possibly_sensitive: .possibly_sensitive, in_reply_to_status_id: .in_reply_to_status_id, in_reply_to_user_id: .in_reply_to_user_id})')"
+  user_ret_modified="$(echo "$user_ret" | jq "$jq_query")"
   user_last_id="$(echo "$user_ret_modified" | jq '.[-1].id')"
 
   echo "$user_ret_modified"
